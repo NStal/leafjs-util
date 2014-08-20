@@ -2,6 +2,13 @@
 
 A handy util for easy testing UI components written in coffee inside browser environment. With a given coffee script, it will mockup an tempary html and import all you needs than make them available at http://localhost:8000/ by default. Currently only support and tested under linux and darwin.
 
+# install
+```bash
+sudo npm install -g leafjs-util
+# or if you already setup PATH to the local modules
+# run it without sudo instead
+```
+
 # usage
 ```bash
 leafjs-tester <path-to-your-script>
