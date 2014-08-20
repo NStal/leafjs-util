@@ -20,15 +20,15 @@ leafjs-tester -h
 ```
 
 # example
-see example forlder for detail
+see example folder for detail.
 
 # rules
 
-Every line start with "## " is considered as an inline command, you can using inline commands to make testing faster and easyer
+Every line start with "## " is considered as an inline command, you can using inline commands to make testing faster and easyer.
 
 ## import css/less
 
-The css will be put to header
+The css will be put to header.
 
 ```coffee-script
 ## require ./style.css
@@ -37,7 +37,7 @@ The css will be put to header
 
 ## import js
 
-The js will be put to header
+The js will be put to header.
 
 ```coffee-script
 ## require ./lib.js
