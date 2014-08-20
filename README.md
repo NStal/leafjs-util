@@ -1,6 +1,6 @@
 # leafjs-util
 
-And handy util for easy testing UI components written in coffee script inside browser environment. With a given coffee script, it will mockup an tempary html and import all you needs than make them available at http://localhost:8000/ by default. Currently only support and tested under linux and darwin.
+A handy util for easy testing UI components written in coffee inside browser environment. With a given coffee script, it will mockup an tempary html and import all you needs than make them available at http://localhost:8000/ by default. Currently only support and tested under linux and darwin.
 
 # usage
 ```bash
@@ -18,12 +18,13 @@ see example forlder for detail
 
 Every line start with "## " is considered as an inline command, you can using inline commands to make testing faster and easyer
 
-## import css
+## import css/less
 
 The css will be put to header
 
 ```coffee-script
 ## require ./style.css
+## require ./style.less
 ```
 
 ## import js
