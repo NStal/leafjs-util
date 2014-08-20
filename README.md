@@ -5,6 +5,7 @@ A handy util for easy testing UI components written in coffee inside browser env
 # usage
 ```bash
 leafjs-tester <path-to-your-script>
+# and then visit http://localhost:8000/ to see the mockuped html
 ```
 # help
 ```bash
