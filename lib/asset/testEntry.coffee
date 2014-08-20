@@ -6,7 +6,7 @@ window.TEST = {
 setTimeout (()->
     $ ()->
         test = ()->
-            if window.TEST.handlers.length < 0
+            if window.TEST.handlers.length is 0
                 return
             handler = window.TEST.handlers.pop()
             handler ()->
