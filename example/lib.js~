@@ -1,0 +1,3 @@
+window.getPrettyTime = function(){
+    var d = new Date
+}

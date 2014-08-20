@@ -1,0 +1,29 @@
+{
+  "name": "leafjs-util",
+  "version": "0.0.5",
+  "description": "Utils for building and testing leafjs library and widget writed using leafjs. Additionally you can test any coffee script with it",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "leafjs",
+    "leaf.js",
+    "builder"
+  ],
+  "author": "NStal",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.17.0",
+    "coffee-script": "^1.7.1",
+    "commander": "^2.3.0",
+    "express": "^4.8.4",
+    "less": "^1.7.4",
+    "lodash": "^2.4.1",
+    "wrench": "^1.5.8"
+  },
+  "directories": {
+    "lib": "./lib",
+    "bin": "./bin"
+  }
+}

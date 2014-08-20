@@ -1,0 +1,94 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '-g', '../' ]
+2 info using npm@1.4.21
+3 info using node@v0.10.30
+4 verbose cache add [ '../', null ]
+5 verbose cache add name=undefined spec="../" args=["../",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: '../',
+6 verbose parsed url   path: '../',
+6 verbose parsed url   href: '../' }
+7 silly lockFile d6a4f867- ../
+8 verbose lock ../ /home/wuminghan/.npm/d6a4f867-.lock
+9 verbose tar pack [ '/home/wuminghan/.npm/leafjs-util/0.0.0/package.tgz', '../' ]
+10 verbose tarball /home/wuminghan/.npm/leafjs-util/0.0.0/package.tgz
+11 verbose folder ../
+12 info prepublish leafjs-util@0.0.0
+13 silly lockFile 4d632ccf-tar tar://../
+14 verbose lock tar://../ /home/wuminghan/.npm/4d632ccf-tar.lock
+15 silly lockFile 47751465-pm-leafjs-util-0-0-0-package-tgz tar:///home/wuminghan/.npm/leafjs-util/0.0.0/package.tgz
+16 verbose lock tar:///home/wuminghan/.npm/leafjs-util/0.0.0/package.tgz /home/wuminghan/.npm/47751465-pm-leafjs-util-0-0-0-package-tgz.lock
+17 silly lockFile 4d632ccf-tar tar://../
+18 silly lockFile 4d632ccf-tar tar://../
+19 silly lockFile 47751465-pm-leafjs-util-0-0-0-package-tgz tar:///home/wuminghan/.npm/leafjs-util/0.0.0/package.tgz
+20 silly lockFile 47751465-pm-leafjs-util-0-0-0-package-tgz tar:///home/wuminghan/.npm/leafjs-util/0.0.0/package.tgz
+21 silly lockFile c20b2071-an-npm-leafjs-util-0-0-0-package /home/wuminghan/.npm/leafjs-util/0.0.0/package
+22 verbose lock /home/wuminghan/.npm/leafjs-util/0.0.0/package /home/wuminghan/.npm/c20b2071-an-npm-leafjs-util-0-0-0-package.lock
+23 silly lockFile c20b2071-an-npm-leafjs-util-0-0-0-package /home/wuminghan/.npm/leafjs-util/0.0.0/package
+24 silly lockFile c20b2071-an-npm-leafjs-util-0-0-0-package /home/wuminghan/.npm/leafjs-util/0.0.0/package
+25 silly lockFile d6a4f867- ../
+26 silly lockFile d6a4f867- ../
+27 silly resolved [ { name: 'leafjs-util',
+27 silly resolved     version: '0.0.0',
+27 silly resolved     description: 'Utils for building and testing leafjs library and widget writed using leafjs',
+27 silly resolved     main: 'index.js',
+27 silly resolved     scripts: { test: 'echo "Error: no test specified" && exit 1' },
+27 silly resolved     keywords: [ 'leafjs', 'leaf.js', 'builder' ],
+27 silly resolved     author: { name: 'NStal' },
+27 silly resolved     license: 'ISC',
+27 silly resolved     dependencies:
+27 silly resolved      { cheerio: '^0.17.0',
+27 silly resolved        'coffee-script': '^1.7.1',
+27 silly resolved        commander: '^2.3.0',
+27 silly resolved        express: '^4.8.4',
+27 silly resolved        less: '^1.7.4',
+27 silly resolved        lodash: '^2.4.1' },
+27 silly resolved     directories: { lib: './lib', bin: './bin' },
+27 silly resolved     bin: { 'leafjs-tester': 'bin/leafjs-tester' },
+27 silly resolved     readme: 'ERROR: No README data found!',
+27 silly resolved     _id: 'leafjs-util@0.0.0',
+27 silly resolved     _shasum: '63ec4144022b1d203609488cf7175fbe20277f65',
+27 silly resolved     _from: '../' } ]
+28 info install leafjs-util@0.0.0 into /usr/lib
+29 info installOne leafjs-util@0.0.0
+30 verbose lib/node_modules/leafjs-util unbuild
+31 info preuninstall leafjs-util@0.0.0
+32 info uninstall leafjs-util@0.0.0
+33 verbose true,/usr/lib/node_modules,/usr/lib/node_modules unbuild leafjs-util@0.0.0
+34 verbose /usr/bin,[object Object] binRoot
+35 info postuninstall leafjs-util@0.0.0
+36 verbose lib/node_modules/leafjs-util unbuild
+37 info preuninstall leafjs-util@0.0.0
+38 info uninstall leafjs-util@0.0.0
+39 verbose true,/usr/lib/node_modules,/usr/lib/node_modules unbuild leafjs-util@0.0.0
+40 verbose /usr/bin,[object Object] binRoot
+41 info postuninstall leafjs-util@0.0.0
+42 error error rolling back Error: EACCES, unlink '/usr/lib/node_modules/leafjs-util'
+42 error error rolling back  leafjs-util@0.0.0 { [Error: EACCES, unlink '/usr/lib/node_modules/leafjs-util']
+42 error error rolling back   errno: 3,
+42 error error rolling back   code: 'EACCES',
+42 error error rolling back   path: '/usr/lib/node_modules/leafjs-util' }
+43 error Error: EACCES, unlink '/usr/lib/node_modules/leafjs-util'
+43 error  { [Error: EACCES, unlink '/usr/lib/node_modules/leafjs-util']
+43 error   errno: 3,
+43 error   code: 'EACCES',
+43 error   path: '/usr/lib/node_modules/leafjs-util' }
+44 error Please try running this command again as root/Administrator.
+45 error System Linux 3.15.1-1-ARCH
+46 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "../"
+47 error cwd /home/wuminghan/battle/leafBuilder/bin
+48 error node -v v0.10.30
+49 error npm -v 1.4.21
+50 error path /usr/lib/node_modules/leafjs-util
+51 error code EACCES
+52 error errno 3
+53 error stack Error: EACCES, unlink '/usr/lib/node_modules/leafjs-util'
+54 verbose exit [ 3, true ]
