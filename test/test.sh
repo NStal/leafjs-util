@@ -4,3 +4,5 @@
 
 cd ../example/;
 coffee ../test/test.coffee ./test.coffee
+#cd ../example/package/;
+#coffee ../../test/test.coffee ./package.coffee -b

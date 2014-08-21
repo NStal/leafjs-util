@@ -1,0 +1,3 @@
+window.other = {
+    value:"otherValue"
+}

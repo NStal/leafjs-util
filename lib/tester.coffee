@@ -16,6 +16,7 @@ program = commander.usage("[options] <target widgetSource.coffee>")
     .option("-j,--jquery <path>","specify the jquery path")
     .option("-l,--leafjs <path>","specify the leafjs path")
     .option("-g,--test-page <path>","path to your own index.html of the test page")
+    .option("-b,--build-package","build the file into a single js package rather than run it in browser")
     .option("-t,--temp-path <path>","path to temp file")
     .option("--use-bare","don't add anything to the index.html of this test")
     .option("--port <port>","port of the test server")
@@ -62,11 +63,16 @@ jqueryPath = program.jquery || pathModule.join(__dirname,"asset/jquery.js")
 leafJsPath = program.leafjs || pathModule.join(__dirname,"asset/leaf.js")
 testLogicPath = program.testEntry or pathModule.join(__dirname,"asset/testEntry.coffee")
 
-dependencies = [
-    jqueryPath
-    leafJsPath
-    testLogicPath
-].map (item)->
+if program.buildPackage
+    dependencies = [
+    ]
+else
+    dependencies = [
+        jqueryPath
+        leafJsPath
+        testLogicPath
+    ]
+dependencies = dependencies.map (item)->
     return {path:item}
 htmlDependencies = null
 build = ()->
@@ -74,10 +80,18 @@ build = ()->
         wrench.rmdirSyncRecursive tempPath
     if not fs.existsSync tempPath
         wrench.mkdirSyncRecursive tempPath
-    testDeps = resolve {path:testTargetPath},[{path:testTargetPath,expand:true}]
+    testDeps = resolve {path:testTargetPath,expand:true},[{path:testTargetPath,expand:true}]
     htmlDependencies = dependencies.concat testDeps
-    console.log "solve dependencies",htmlDependencies
-    indexHtml = prepareFiles(htmlDependencies)
+    if not program.buildPackage
+        console.log "solve dependencies",htmlDependencies
+    content = prepareFiles(htmlDependencies)
+    if program.buildPackage
+        console.log content
+        process.exit(0)
+    else
+        indexHtml = content
+        
+    
 resolve = (fileInfo,deps)->
     file = fileInfo.path
     if pathModule.extname(file) isnt ".coffee"
@@ -85,8 +99,12 @@ resolve = (fileInfo,deps)->
     if not fileInfo.expand
         return deps
     content = util.getFileInSearchPath file,pathes
+    results = []
     lines = content.split("\n").filter (line)->line.trim()
+    lines = lines.filter (line)->line.indexOf("## require ") is 0
+    lines.reverse()
     for line in lines
+        console.log "solve line",line
         asVar = false
         if line[0] is "#" and line[1] isnt "#"
             continue
@@ -100,48 +118,66 @@ resolve = (fileInfo,deps)->
             continue
         if not depPath
             throw new Error "invalid require clause '#{line.trim()}', missing target file."
-        deps.unshift {path:depPath,asVar:asVar}
+        deps.unshift {path:depPath,asVar:asVar,varName:params[3]}
         if pathModule.extname(depPath) is ".coffee"
             resolve depPath,deps
     return deps
 
 prepareFiles = (files)->
-    $ = cheerio.load testIndexTemplate
+    if program.buildPackage
+        processor = packager
+    else
+        processor = preparer
+        $ = cheerio.load testIndexTemplate
+    content = ""
     for fileInfo in files
         file = fileInfo.path
         if fileInfo.asVar
-            preparer["#"](file,$)
+            if program.buildPackage
+                content = processor["#"](fileInfo,content)
+            else
+                processor["#"](fileInfo,$)
             continue
         ext = pathModule.extname(file)
-        if preparer[ext]
-            preparer[ext](file,$)
+        if processor[ext]
+            if program.buildPackage
+                content = processor[ext](fileInfo,content)
+            else
+                processor[ext](fileInfo,$)
         else
             throw new Error "unkown ext type #{ext} of file #{file}"
+    if content
+        return content
     html = $.html()
     fs.writeFileSync pathModule.join(tempPath,"index.html"),html
     return html
 preparer = {
-    ".html":(path,$)->
+    ".html":(fileInfo,$)->
+        path = fileInfo.path
         content = util.getFileInSearchPath path,pathes
         $("body").append(content)
         
-    ".js":(path,$)->
+    ".js":(fileInfo,$)->
+        path = fileInfo.path
         src = path
         target = pathModule.join tempPath,pathModule.basename path
         util.copySync src,target
         $("head").append("<script src='./#{pathModule.basename(path)}'></script>\n")
-    ".coffee":(path,$)->
+    ".coffee":(fileInfo,$)->
+        path = fileInfo.path
         content = CoffeeScript.compile util.getFileInSearchPath path,pathes
         target = pathModule.join tempPath,pathModule.basename(path,".coffee")+".js"
         fs.writeFileSync target,content
         $("head").append("<script src='./#{pathModule.basename(target)}'></script>\n")
-    ".css":(path,$)->
+    ".css":(fileInfo,$)->
+        path = fileInfo.path
         src = path
         target = pathModule.join tempPath,pathModule.basename path
         util.copySync src,target
         $("head").append("<link rel='stylesheet' href='./#{pathModule.basename(target)}' type='text/css' media='screen' />\n")
 
-    ".less":(path,$)->
+    ".less":(fileInfo,$)->
+        path = fileInfo.path
         content = null
         Less.render (util.getFileInSearchPath path,pathes),(err,result)->
             if err
@@ -152,10 +188,9 @@ preparer = {
         fs.writeFileSync target,content
         
         $("head").append("<link rel='stylesheet' href='./#{pathModule.basename(target)}' type='text/css' media='screen' />\n")
-    "#":(path,$)->
-        params = path.split("#").filter (item)->item
-        path = params[0]
-        varName = params[1]
+    "#":(fileInfo,$)->
+        path = fileInfo.path
+        varName = fileInfo.varName
         if varName is "var"
             varName = pathModule.basename path,pathModule.extname(path)
         content = util.getFileInSearchPath path,pathes
@@ -163,9 +198,42 @@ preparer = {
         fileName = "import-var-#{varName}.js"
         target = pathModule.join tempPath,fileName
         fs.writeFileSync target,jsContent
-        $("head").append("<script src='./#{fileName}'></script>\n")
+        $("head").append("<script src='./#{fileName}'></script>\n");
 
 }
+packager = {
+    ".html":(fileInfo,content)->
+        path = fileInfo.path
+        console.warn "//packge mode don't support include html #{fileInfo.path}"
+        return content
+    ".js":(fileInfo,content)->
+        path = fileInfo.path
+        js = util.getFileInSearchPath path,pathes
+        return content + ";;;\n#{js}"
+    ".coffee":(fileInfo,content)->
+        path = fileInfo.path
+        js = CoffeeScript.compile util.getFileInSearchPath path,pathes
+        return content + ";;;\n#{js}"
+    ".css":(fileInfo,content)->
+        path = fileInfo.path
+        css = util.getFileInSearchPath path,pathes
+        return content + "(function(){var style = document.createElement('style');style.setAttribute('data-debug-path',#{JSON.stringify('path')});style.innerHTML = #{JSON.stringify(css)};document.head.appendChild(style)})()"
+    ".less":(fileInfo,content)->
+        path = fileInfo.path
+        css = null
+        Less.render (util.getFileInSearchPath path,pathes),(err,result)->
+            if err
+                throw err
+            css = result
+        return content + "(function(){var style = document.createElement('style');style.setAttribute('data-debug-path',#{JSON.stringify('path')});style.innerHTML = #{JSON.stringify(css)};document.head.appendChild(style)})()"
+    "#":(fileInfo,content)->
+        path = fileInfo.path
+        varName = fileInfo.varName
+        if varName is "var"
+            varName = pathModule.basename path,pathModule.extname(path)
+        content = util.getFileInSearchPath path,pathes
+        jsContent = "window.#{varName} = #{JSON.stringify(content)}"
+        return content + jsContent
 
-
+}
 build()
