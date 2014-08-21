@@ -4,6 +4,8 @@ fs = require "fs"
 exports.copySync = (from,to)->
     symlinkSupports = ["linux","darwin"]
     if os.platform() in symlinkSupports
+        if not fs.existsSync pathModule.resolve from
+            throw new Error "file #{pathModule.resolve from} not exists"
         fs.symlinkSync (pathModule.resolve from),to
     else
         throw new Error "leafjs-tester not support on your platform"

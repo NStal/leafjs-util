@@ -66,23 +66,28 @@ dependencies = [
     jqueryPath
     leafJsPath
     testLogicPath
-]
+].map (item)->
+    return {path:item}
 htmlDependencies = null
 build = ()->
     if fs.existsSync tempPath
         wrench.rmdirSyncRecursive tempPath
     if not fs.existsSync tempPath
         wrench.mkdirSyncRecursive tempPath
-    testDeps = resolve testTargetPath,[testTargetPath]
+    testDeps = resolve {path:testTargetPath},[{path:testTargetPath,expand:true}]
     htmlDependencies = dependencies.concat testDeps
     console.log "solve dependencies",htmlDependencies
     indexHtml = prepareFiles(htmlDependencies)
-resolve = (file,deps)->
+resolve = (fileInfo,deps)->
+    file = fileInfo.path
     if pathModule.extname(file) isnt ".coffee"
+        return deps
+    if not fileInfo.expand
         return deps
     content = util.getFileInSearchPath file,pathes
     lines = content.split("\n").filter (line)->line.trim()
     for line in lines
+        asVar = false
         if line[0] is "#" and line[1] isnt "#"
             continue
         if line.indexOf("## require ") isnt 0
@@ -90,20 +95,21 @@ resolve = (file,deps)->
         params = line.substring(2).trim().split(" ").filter (item)->item
         depPath = params[1]
         if params[2] is "as" and params[3]
-            depPath = "#" + depPath + "#" + params[3]
-        if pathModule.basename(depPath) in (deps.map (path)-> pathModule.basename(path))
+            asVar = true
+        if pathModule.basename(depPath) in (deps.map (info)-> pathModule.basename(info.path))
             continue
         if not depPath
             throw new Error "invalid require clause '#{line.trim()}', missing target file."
-        deps.unshift depPath
+        deps.unshift {path:depPath,asVar:asVar}
         if pathModule.extname(depPath) is ".coffee"
             resolve depPath,deps
     return deps
 
 prepareFiles = (files)->
     $ = cheerio.load testIndexTemplate
-    for file in files
-        if file[0] is "#"
+    for fileInfo in files
+        file = fileInfo.path
+        if fileInfo.asVar
             preparer["#"](file,$)
             continue
         ext = pathModule.extname(file)
