@@ -1,6 +1,6 @@
 {
   "name": "leafjs-util",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Utils for building and testing leafjs library and widget writed using leafjs. Additionally you can test any coffee script with it",
   "main": "index.js",
   "scripts": {
