@@ -6,16 +6,19 @@ wrench = require("wrench")
 program = require("commander").usage("[option] <js-folder-root>")
     .option("-o,--output-file <path>","specify the output require configs")
     .option("-r,--root <root patah>","specifty the generated files root name")
+    .option("-f,--force-overwrite","force overwrite the file rather than try merging it")
     .option("--enable-debug","enable debug mode in config")
     .option("--set-version","set version for the config")
+    .option("--main <main module>","set entry module for the config")
     .parse(process.argv)
 outputFile = program.outputFile
 outputFormat = "json"
 indentCount = 4
 jsIncludePath = program.args[0] or "./"
 version = program.setVersion or null
+mainModule = program.main or null
 enableDebug = program.enableDebug and true or false
-if outputFormat is "json" and outputFile and fs.existsSync outputFile
+if outputFormat is "json" and outputFile and not program.forceOverwrite and fs.existsSync outputFile
     try
         config = JSON.parse fs.readFileSync outputFile,"utf8"
     catch e
@@ -27,6 +30,8 @@ else
 config.name = config.name or "leaf-require"
 config.js = {}
 config.debug = config.debug or enableDebug
+if mainModule
+    config.js.main = mainModule
 if version
     config.version = version
 files = wrench.readdirSyncRecursive jsIncludePath
