@@ -1,0 +1,17 @@
+{
+    "name": "leaf-require",
+    "js": {
+        "root": "",
+        "files": [
+            {
+                "path": "lib.js",
+                "hash": "ad6614"
+            },
+            {
+                "path": "main.js",
+                "hash": "46e8a1"
+            }
+        ]
+    },
+    "debug": true
+}
