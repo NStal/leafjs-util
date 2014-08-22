@@ -104,7 +104,6 @@ resolve = (fileInfo,deps)->
     lines = lines.filter (line)->line.indexOf("## require ") is 0
     lines.reverse()
     for line in lines
-        console.log "solve line",line
         asVar = false
         if line[0] is "#" and line[1] isnt "#"
             continue

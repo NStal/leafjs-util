@@ -7,6 +7,7 @@ program = require("commander").usage("[option] <js-folder-root>")
     .option("-o,--output-file <path>","specify the output require configs")
     .option("-r,--root <root patah>","specifty the generated files root name")
     .option("-f,--force-overwrite","force overwrite the file rather than try merging it")
+    .option("--excludes <folder or file>","exclude certain folder or file by matching the starts, split by ','")
     .option("--enable-debug","enable debug mode in config")
     .option("--set-version","set version for the config")
     .option("--main <main module>","set entry module for the config")
@@ -15,6 +16,7 @@ outputFile = program.outputFile
 outputFormat = "json"
 indentCount = 4
 jsIncludePath = program.args[0] or "./"
+excludes = (program.excludes or "").split(",").map (item)->item.trim()
 version = program.setVersion or null
 mainModule = program.main or null
 enableDebug = program.enableDebug and true or false
@@ -37,6 +39,12 @@ if version
 files = wrench.readdirSyncRecursive jsIncludePath
 fileWhiteList = [/\.js$/i]
 files = files.filter (file)->
+    filePath = pathModule.resolve pathModule.join jsIncludePath,file
+    for exclude in excludes
+        console.log exclude
+        excludePath = pathModule.resolve exclude
+        if filePath.indexOf(excludePath) is 0
+            return false
     for white in fileWhiteList
         if white.test file
             return true
