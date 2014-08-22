@@ -1,2 +1,3 @@
 #!/bin/bash
-coffee ../../lib/requireBuilder.coffee "./js" --enable-debug -o ./requireConfig.json
+coffee ../../lib/requireBuilder.coffee ./  --enable-debug --excludes ./exclude/,./exclude2/
+

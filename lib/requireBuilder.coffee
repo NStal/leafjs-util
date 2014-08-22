@@ -16,7 +16,7 @@ outputFile = program.outputFile
 outputFormat = "json"
 indentCount = 4
 jsIncludePath = program.args[0] or "./"
-excludes = (program.excludes or "").split(",").map (item)->item.trim()
+excludes = (program.excludes or "").split(",").map((item)->item.trim()).filter (item)->item
 version = program.setVersion or null
 mainModule = program.main or null
 enableDebug = program.enableDebug and true or false
@@ -41,9 +41,8 @@ fileWhiteList = [/\.js$/i]
 files = files.filter (file)->
     filePath = pathModule.resolve pathModule.join jsIncludePath,file
     for exclude in excludes
-        console.log exclude
         excludePath = pathModule.resolve exclude
-        if filePath.indexOf(excludePath) is 0
+        if filePath is excludePath or filePath.indexOf(excludePath+"/")  is 0
             return false
     for white in fileWhiteList
         if white.test file
