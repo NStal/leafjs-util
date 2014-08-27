@@ -9,6 +9,7 @@ program = require("commander").usage("[option] <js-folder-root>")
     .option("-f,--force-overwrite","force overwrite the file rather than try merging it")
     .option("--excludes <folder or file>","exclude certain folder or file by matching the starts, split by ','")
     .option("--enable-debug","enable debug mode in config")
+    .option("--enable-cache","enable cache in config")
     .option("--set-version","set version for the config")
     .option("--main <main module>","set entry module for the config")
     .parse(process.argv)
@@ -32,6 +33,7 @@ else
 config.name = config.name or "leaf-require"
 config.js = {}
 config.debug = config.debug or enableDebug
+config.cache = config.cache or program.enableCache or false
 if mainModule
     config.js.main = mainModule
 if version
