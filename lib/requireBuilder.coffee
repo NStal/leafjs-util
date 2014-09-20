@@ -10,7 +10,7 @@ program = require("commander").usage("[option] <js-folder-root>")
     .option("--excludes <folder or file>","exclude certain folder or file by matching the starts, split by ','")
     .option("--enable-debug","enable debug mode in config")
     .option("--enable-cache","enable cache in config")
-    .option("--set-version","set version for the config")
+    .option("--set-version <version>","set version for the config")
     .option("--main <main module>","set entry module for the config")
     .parse(process.argv)
 outputFile = program.outputFile
