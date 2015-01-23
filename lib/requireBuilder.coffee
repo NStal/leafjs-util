@@ -8,6 +8,7 @@ program = require("commander").usage("[option] <js-folder-root>")
     .option("-r,--root <root patah>","specifty the generated files root name")
     .option("-f,--force-overwrite","force overwrite the file rather than try merging it")
     .option("--excludes <folder or file>","exclude certain folder or file by matching the starts, split by ','")
+    .option("--includes <folder or file>","only include folder or file by matching the starts, split by ','")
     .option("--enable-debug","enable debug mode in config")
     .option("--enable-cache","enable cache in config")
     .option("--set-version <version>","set version for the config")
@@ -18,6 +19,8 @@ outputFormat = "json"
 indentCount = 4
 jsIncludePath = program.args[0] or "./"
 excludes = (program.excludes or "").split(",").map((item)->item.trim()).filter (item)->item
+includes = (program.includes or "").split(",").map((item)->item.trim()).filter (item)->item
+
 version = program.setVersion or null
 mainModule = program.main or null
 enableDebug = program.enableDebug and true or false
@@ -46,6 +49,15 @@ files = files.filter (file)->
         excludePath = pathModule.resolve exclude
         if filePath is excludePath or filePath.indexOf(excludePath+"/")  is 0
             return false
+    if includes.length > 0
+        available = false
+        for include in includes
+            includePath = pathModule.resolve include
+            if filePath is includePath or filePath.indexOf(includePath+"/")  is 0
+                available = true
+        if not available
+            return false
+
     for white in fileWhiteList
         if white.test file
             return true
