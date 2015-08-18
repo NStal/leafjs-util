@@ -80,7 +80,6 @@
             if(!this.modules[realPath]){
                 throw new Error("module " + path + " required at " + (fromPath || "/") + " is not exists")
             }
-            console.log("enter",realPath,fromPath,path);
             var module = this.modules[realPath];
             if(module.exports){
                 return module.exports
@@ -92,7 +91,6 @@
             module.exec()
             module.exports = module.module.exports
             module.isRequiring = false
-            console.debug("after exec",module.module,realPath)
             return module.exports
         },
         setModule:function(modulePath,module,exec){
