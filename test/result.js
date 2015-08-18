@@ -80,7 +80,6 @@
             if(!this.modules[realPath]){
                 throw new Error("module " + path + " required at " + (fromPath || "/") + " is not exists")
             }
-            console.log("enter",realPath,fromPath,path);
             var module = this.modules[realPath];
             if(module.exports){
                 return module.exports
@@ -92,7 +91,6 @@
             module.exec()
             module.exports = module.module.exports
             module.isRequiring = false
-            console.debug("after exec",module.module,realPath)
             return module.exports
         },
         setModule:function(modulePath,module,exec){
@@ -106,10 +104,10 @@
         }
     };
     ;(function(){
-    var require = window.GlobalContext.requireModule.bind(window.GlobalContext,"a.js")
-    var module = {}
-    module.exports = {}
-    var exports = module.exports
+    var require = window.GlobalContext.requireModule.bind(window.GlobalContext,"a.js");
+    var module = {};
+    module.exports = {};
+    var exports = module.exports;
     function exec(){
         console.debug("I'm a")
 module.exports = {
@@ -121,10 +119,10 @@ module.exports = {
 })()
 
 ;(function(){
-    var require = window.GlobalContext.requireModule.bind(window.GlobalContext,"main.js")
-    var module = {}
-    module.exports = {}
-    var exports = module.exports
+    var require = window.GlobalContext.requireModule.bind(window.GlobalContext,"main.js");
+    var module = {};
+    module.exports = {};
+    var exports = module.exports;
     function exec(){
         if(!console.debug){
     console.debug = console.log

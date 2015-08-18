@@ -69,7 +69,7 @@ files = files.filter (file)->
             return true
     return false
 files = files.map (file)->
-    content = fs.readFileSync (pathModule.join jsIncludePath,file)
+    content = fs.readFileSync (pathModule.join jsIncludePath,file),"utf8"
     hash = crypto.createHash("md5").update(content,"utf8").digest("hex").substring(0,6)
     return {
         path:file
@@ -86,7 +86,7 @@ for file in files
 jsContent = targetTemplate.replace(/{{contextName}}/g,contextName).replace("{{modules}}",modulesContent.join("\n")).replace(/{{mainModule}}/g,"\"#{mainModule}\"" or "null")
 
 config.js.root = program.root or ""
-config.js.files = files
+config.js.files = files.map (item)->{path:item.path,hash:item.hash}
 
 jsonContent = JSON.stringify config,null,indentCount
 if outputFormat is "json"
